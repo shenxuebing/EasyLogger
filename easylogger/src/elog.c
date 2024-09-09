@@ -853,6 +853,7 @@ const char *elog_find_tag(const char *log, uint8_t lvl, size_t *tag_len) {
     return tag;
 }
 
+
 /**
  * dump the hex format data to log
  *
@@ -884,10 +885,18 @@ void elog_hexdump(const char *name, uint8_t width, const void *buf, uint16_t siz
 
     /* lock output */
     elog_output_lock();
-
+    fmt_result = snprintf(log_buf, ELOG_LINE_BUF_SIZE, "D/HEX %s(len:%d,hex:%08x)", name, size,size);
+	if ((fmt_result > -1) && (fmt_result <= ELOG_LINE_BUF_SIZE)) {
+		log_len = fmt_result;
+	}
+	else {
+		log_len = ELOG_LINE_BUF_SIZE;
+	}
+    log_len += elog_strcpy(log_len, log_buf + log_len, ELOG_NEWLINE_SIGN);
+    elog_port_output(log_buf, log_len);
     for (i = 0; i < size; i += width) {
         /* package header */
-        fmt_result = snprintf(log_buf, ELOG_LINE_BUF_SIZE, "D/HEX %s: %04X-%04X: ", name, i, i + width - 1);
+        fmt_result = snprintf(log_buf , ELOG_LINE_BUF_SIZE, "0x%p-0x%p:", name, name + width - 1);
         /* calculate log length */
         if ((fmt_result > -1) && (fmt_result <= ELOG_LINE_BUF_SIZE)) {
             log_len = fmt_result;
@@ -903,7 +912,7 @@ void elog_hexdump(const char *name, uint8_t width, const void *buf, uint16_t siz
             }
             log_len += elog_strcpy(log_len, log_buf + log_len, dump_string);
             if ((j + 1) % 8 == 0) {
-                log_len += elog_strcpy(log_len, log_buf + log_len, " ");
+                //log_len += elog_strcpy(log_len, log_buf + log_len, " ");
             }
         }
         log_len += elog_strcpy(log_len, log_buf + log_len, "  ");
