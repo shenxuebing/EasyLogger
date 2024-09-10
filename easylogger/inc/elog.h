@@ -88,8 +88,14 @@ extern "C" {
     #define ELOG_OUTPUT_FUNC NULL
     #endif
 
+    #if (_WIN32||WIN64)
+    #define FILENAME(x) strrchr(x,'\\')?strrchr(x,'\\')+1:x
+    #else
+    #define FILENAME(x) strrchr(x,'/')?strrchr(x,'/')+1:x
+    #endif
+
     #ifdef ELOG_FMT_USING_DIR
-    #define ELOG_OUTPUT_DIR __FILE__
+    #define ELOG_OUTPUT_DIR FILENAME(__FILE__)
     #else
     #define ELOG_OUTPUT_DIR NULL
     #endif

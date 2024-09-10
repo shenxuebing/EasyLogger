@@ -73,7 +73,7 @@ void elog_port_deinit(void) {
  */
 void elog_port_output(const char *log, size_t size) {
     /* output to terminal */
-    printf("%.*s", size, log);
+    //printf("%.*s", size, log);
 #ifdef ELOG_FILE_ENABLE
     /* write the file */
     elog_file_write(log, size);
@@ -105,7 +105,7 @@ const char *elog_port_get_time(void) {
     static SYSTEMTIME currTime;
 
     GetLocalTime(&currTime);
-    snprintf(cur_system_time, 24, "%02d-%02d %02d:%02d:%02d.%03d", currTime.wMonth, currTime.wDay,
+    snprintf(cur_system_time, 24, "%04d-%02d-%02d %02d:%02d:%02d.%03d", currTime.wYear, currTime.wMonth, currTime.wDay,
             currTime.wHour, currTime.wMinute, currTime.wSecond, currTime.wMilliseconds);
 
     return cur_system_time;

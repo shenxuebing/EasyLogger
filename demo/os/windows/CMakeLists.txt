@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.26)
 project(easylogger_demo)
 
 set(CMAKE_C_STANDARD 99)
+#add_compile_definitions(ELOG_COLOR_ENABLE=1)
 
 include_directories(
         ${PROJECT_SOURCE_DIR}

@@ -47,10 +47,12 @@ extern "C" {
 #define unlikely(x) (x)
 #endif
 
-typedef struct {
-    char *name;              /* file name */
-    size_t max_size;         /* file max size */
-    int max_rotate;          /* max rotate file count */
+typedef struct
+{
+	char path[128];          /* add log path*/
+	char name[256];        /* full file name */
+	size_t max_size;         /* file max size */
+	int max_rotate;          /* max rotate file count */
 } ElogFileCfg;
 
 /* elog_file.c */

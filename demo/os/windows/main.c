@@ -32,24 +32,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
+#include <elog_file.h>
 
 static void test_elog(void);
 
 int main(void) {
+
+    ElogFileCfg fileCfg = {
+		.name = "file",
+		.path = "./log",
+		.max_size = 1024 * 1024,
+		.max_rotate = 3,
+	};
+
+    //elog_file_config(&fileCfg);
+    elog_setFilePath();
     /* close printf buffer */
-    setbuf(stdout, NULL);
+    //setbuf(stdout, NULL);
     /* initialize EasyLogger */
-    elog_init();
+	elog_file_init();
+    //elog_init();
     /* set EasyLogger log format */
+
     elog_set_fmt(ELOG_LVL_ASSERT, ELOG_FMT_ALL);
-    elog_set_fmt(ELOG_LVL_ERROR, ELOG_FMT_LVL | ELOG_FMT_TAG | ELOG_FMT_TIME);
-    elog_set_fmt(ELOG_LVL_WARN, ELOG_FMT_LVL | ELOG_FMT_TAG | ELOG_FMT_TIME);
-    elog_set_fmt(ELOG_LVL_INFO, ELOG_FMT_LVL | ELOG_FMT_TAG | ELOG_FMT_TIME);
-    elog_set_fmt(ELOG_LVL_DEBUG, ELOG_FMT_ALL & ~ELOG_FMT_FUNC);
-    elog_set_fmt(ELOG_LVL_VERBOSE, ELOG_FMT_ALL & ~ELOG_FMT_FUNC);
+    elog_set_fmt(ELOG_LVL_ERROR, ELOG_FMT_ALL);// ELOG_FMT_LVL | ELOG_FMT_TAG | ELOG_FMT_TIME);
+    elog_set_fmt(ELOG_LVL_WARN, ELOG_FMT_ALL);// ELOG_FMT_LVL | ELOG_FMT_TAG | ELOG_FMT_TIME);
+    elog_set_fmt(ELOG_LVL_INFO, ELOG_FMT_ALL);// ELOG_FMT_LVL | ELOG_FMT_TAG | ELOG_FMT_TIME);
+    elog_set_fmt(ELOG_LVL_DEBUG, ELOG_FMT_ALL);// &~ELOG_FMT_FUNC);
+    elog_set_fmt(ELOG_LVL_VERBOSE, ELOG_FMT_ALL);// &~ELOG_FMT_FUNC);
+#ifdef ELOG_COLOR_ENABLE
+	elog_set_text_color_enabled(true);
+#endif
     /* start EasyLogger */
     elog_start();
-
+    elog_set_output_enabled(true);
+    elog_set_filter_lvl(ELOG_LVL_VERBOSE);
     /* dynamic set enable or disable for output logs (true or false) */
 //    elog_set_output_enabled(false);
     /* dynamic set output logs's level (from ELOG_LVL_ASSERT to ELOG_LVL_VERBOSE) */
